@@ -26,10 +26,14 @@ var (
 //
 // Use the errors defined above as described, again wrapping into fmt.Errorf
 
+const (
+	errFormat = "err: %w"
+)
+
 func StringSum(input string) (output string, err error) {
 	input = strings.Join(strings.Fields(input), "")
 	if input == "" {
-		return "", fmt.Errorf("%s", errorEmptyInput)
+		return "", fmt.Errorf(errFormat, errorEmptyInput)
 	}
 
 	re := regexp.MustCompile(`^([+-]?)(\d+)([+-])(\d+)$`)
@@ -41,15 +45,20 @@ func StringSum(input string) (output string, err error) {
 
 		firstInt, err := strconv.Atoi(firstStr)
 		if err != nil {
-			return "", fmt.Errorf("%s", err.Error())
+			return "", fmt.Errorf(errFormat, err)
 		}
 		secondInt, err := strconv.Atoi(secondStr)
 		if err != nil {
-			return "", fmt.Errorf("%s", err.Error())
+			return "", fmt.Errorf(errFormat, err)
 		}
 
 		return strconv.Itoa(firstInt + secondInt), nil
+	} else {
+		_, err := strconv.Atoi(input)
+		if err != nil {
+			return "", fmt.Errorf(errFormat, err)
+		}
 	}
 
-	return "", fmt.Errorf("%s", errorNotTwoOperands)
+	return "", fmt.Errorf(errFormat, errorNotTwoOperands)
 }
