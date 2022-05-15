@@ -29,7 +29,7 @@ var (
 func StringSum(input string) (output string, err error) {
 	input = strings.Join(strings.Fields(input), "")
 	if input == "" {
-		return "", errorEmptyInput
+		return "", fmt.Errorf("%s", errorEmptyInput)
 	}
 
 	re := regexp.MustCompile(`^([+-]?)(\d+)([+-])(\d+)$`)
@@ -51,5 +51,5 @@ func StringSum(input string) (output string, err error) {
 		return strconv.Itoa(firstInt + secondInt), nil
 	}
 
-	return "", errorNotTwoOperands
+	return "", fmt.Errorf("%s", errorNotTwoOperands)
 }
