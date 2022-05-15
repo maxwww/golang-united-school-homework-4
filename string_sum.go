@@ -36,29 +36,21 @@ func StringSum(input string) (output string, err error) {
 		return "", fmt.Errorf(errFormat, errorEmptyInput)
 	}
 
-	re := regexp.MustCompile(`^([+-]?)(\d+)([+-])(\d+)$`)
+	re := regexp.MustCompile(`([+-]?[^+-]+)`)
 	matches := re.FindAllStringSubmatch(input, -1)
+	var operands []int
 
-	if len(matches) == 1 {
-		firstStr := matches[0][1] + matches[0][2]
-		secondStr := matches[0][3] + matches[0][4]
-
-		firstInt, err := strconv.Atoi(firstStr)
+	for _, v := range matches {
+		intValue, err := strconv.Atoi(v[0])
 		if err != nil {
 			return "", fmt.Errorf(errFormat, err)
 		}
-		secondInt, err := strconv.Atoi(secondStr)
-		if err != nil {
-			return "", fmt.Errorf(errFormat, err)
-		}
-
-		return strconv.Itoa(firstInt + secondInt), nil
-	} else {
-		_, err := strconv.Atoi(input)
-		if err != nil {
-			return "", fmt.Errorf(errFormat, err)
-		}
+		operands = append(operands, intValue)
 	}
 
-	return "", fmt.Errorf(errFormat, errorNotTwoOperands)
+	if len(operands) != 2 {
+		return "", fmt.Errorf(errFormat, errorNotTwoOperands)
+	}
+
+	return strconv.Itoa(operands[0] + operands[1]), nil
 }
